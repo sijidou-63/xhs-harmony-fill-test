@@ -13,7 +13,7 @@
 const harmony=new URLSearchParams(location.search).get('platform')==='harmony';
 const ios=new URLSearchParams(location.search).get('platform')==='ios'||/iPhone|iPad|iPod/.test(navigator.userAgent);
 const title=(harmony?'鸿蒙':ios?'iPhone':'安卓')+'扫码图文测试';
-document.getElementById('heading').textContent=(ios?'iPhone':'安卓')+'图文填入测试';
+document.getElementById('heading').textContent=(harmony?'鸿蒙':ios?'iPhone':'安卓')+'图文填入测试';
 if(ios)document.getElementById('instructions').textContent='微信右上角“…” → 在默认浏览器打开，使用 Safari 后点击下方按钮。';
 const content='这是电脑发送到手机的测试正文。\n第二行：检查中文、换行和标点。\n图片顺序应为第1张、第2张。\n#入额考试[话题]# #主观题[话题]#';
 document.getElementById('title').textContent=title;
