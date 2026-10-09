@@ -6,7 +6,7 @@
 <main><h1 id="heading">手机图文填入测试</h1><p id="instructions">在微信中，请点右上角“…” → 在浏览器打开，再点击下方按钮。</p>
 <img src="./test-1.png" alt="第1张"><img src="./test-2.png" alt="第2张">
 <h3 id="title"></h3><pre id="body"></pre>
-<button id="open">打开小红书并填入</button><button id="alternate" hidden>测试二：另一种图文跳转</button><p id="status">等待点击</p>
+<button id="open">打开小红书并填入</button><button id="alternate" hidden>测试二：鸿蒙应用链接</button><p id="status">等待点击</p>
 <p>进入小红书后，检查两张图片的顺序、标题和正文。请手动保存草稿，再重新打开确认。</p>
 <small>本页只能记录按钮点击，无法判断小红书是否已填入或已保存。测试内容不含真实经营素材。</small></main>
 <script>
@@ -18,7 +18,7 @@ if(ios)document.getElementById('instructions').textContent='微信右上角“�
 const content='这是电脑发送到手机的测试正文。\n第二行：检查中文、换行和标点。\n图片顺序应为第1张、第2张。\n#入额考试[话题]# #主观题[话题]#';
 document.getElementById('title').textContent=title;
 document.getElementById('body').textContent=content;
-if(harmony){document.getElementById('instructions').textContent='微信扫码后，右上角“…” → 在系统浏览器打开。先点测试一；未填入图文时返回本页，再点测试二。';document.getElementById('open').textContent='测试一：打开小红书并填入';document.getElementById('alternate').hidden=false;}
+if(harmony){document.getElementById('instructions').textContent='微信扫码后，右上角“…” → 在系统浏览器打开。先点测试一；未完整填入图文时返回本页，再点测试二（鸿蒙应用链接）。';document.getElementById('open').textContent='测试一：打开小红书并填入';document.getElementById('alternate').hidden=false;}
 function openNote(usePost){
  const imageUrls=[1,2].map(n=>new URL('./test-'+n+'.png',location.href).href);
  document.getElementById('status').textContent='已点击唤起，请在小红书中确认实际填入结果。';
@@ -31,10 +31,10 @@ function openNote(usePost){
   return;
  }
  const sessionId=Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('').replace(/^(.{8})(.{4})(.{4})(.{4})(.{12})$/,'$1-$2-$3-$4-$5');
- const data={share_type:'note',sdk_version:'1.0.0',third_app_package:'system_album_other',third_app_version:'1.0.0',share_session_id:sessionId,did:'',start_share_timestamp:Date.now(),fromJsSdk:false,note_info:{title:{value:title},content:{value:content},image_info:[1,2].map(n=>({uri:null,url:new URL('./test-'+n+'.png',location.href).href}))}};
+ const data={share_type:'note',sdk_version:harmony?'1.0.4':'1.0.0',third_app_package:'system_album_other',third_app_version:'1.0.0',share_session_id:sessionId,did:'',start_share_timestamp:Date.now(),fromJsSdk:false,note_info:{title:{value:title},content:{value:content},image_info:[1,2].map(n=>({uri:null,url:new URL('./test-'+n+'.png',location.href).href}))}};
  const bytes=new TextEncoder().encode(JSON.stringify(data));
  const encoded=btoa(Array.from(bytes,b=>String.fromCharCode(b)).join(''));
- location.href='xhsdiscover://share_sdk?data='+encodeURIComponent(encoded);
+ location.href=(harmony?'https://www.xiaohongshu.com/open/new_sdk/ul?data=':'xhsdiscover://share_sdk?data=')+encodeURIComponent(encoded);
 }
 document.getElementById('open').onclick=()=>openNote(ios||harmony);
 document.getElementById('alternate').onclick=()=>openNote(false);
